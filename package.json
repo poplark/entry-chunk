@@ -4,14 +4,16 @@
   "description": "",
   "main": "entry/src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "entry": "node scripts/entry.js",
+    "common": "node scripts/common.js",
+    "widget": "node scripts/widget.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router": "^6.4.2"
+    "react-router-dom": "^6.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
