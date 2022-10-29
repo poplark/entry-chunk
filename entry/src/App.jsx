@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 function Dashboard() {
   return <div>
@@ -7,19 +7,15 @@ function Dashboard() {
     todo - content - widget - router
   </div>
 }
-function About() {
-  return <div>
-    <p>About</p>
-    todo - content - widget - router
-  </div>
-}
+
+const About = lazy(() => import('./About'));
 
 function loadWidgets() {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve([
-        {name: 'xx', path: '/xx', file: '/widgets/xxx'},
-        {name: 'yy', path: '/yy', file: '/widgets/yyy'},
+        {name: 'WA', path: 'wa', file: '/widget/wa.js'},
+        {name: 'yy', path: 'yy', file: '/widgets/yyy'},
       ])
     }, 1000);
   });
@@ -33,7 +29,7 @@ export function App() {
     })
   }, []);
   return (
-    <BrowserRouter>
+    <Router>
       <header>
         <h1>Header</h1>
         <nav>
@@ -46,26 +42,35 @@ export function App() {
         </nav>
       </header>
 
-      <Suspense fallback={<div>loading...</div>}>
-          <Routes>
-            <Route path='/' component={Dashboard}></Route>
-            {/* todo - dynamic routes */}
-            {
-              widgets.map((widget) => (
-                <Route
-                  key={widget.path}
-                  path={widget.path}
-                  component={lazy(() => import(widget.file))}
-                  />
-              ))
-            }
-            <Route path='/about' component={About}></Route>
-          </Routes>
-      </Suspense>
+      <Routes>
+        <Route path='/' element={<Dashboard/>}></Route>
+        {/* todo - dynamic routes */}
+        {
+          widgets.map((widget) => {
+            // const Comp = lazy(() => import(`${widget.file}`));
+            // const Comp = (0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
+            //   return __webpack_require__.e(/*! import() */ widget.file).then(__webpack_require__.bind(__webpack_require__, /*! ./About */ widget.file));
+            // });
+            const Comp = lazy(function () {
+              return __webpack_require__.e(widget.file).then(__webpack_require__.bind(__webpack_require__, widget.file));
+            });
+            return <Route
+              key={widget.path}
+              path={widget.path}
+              element={<Suspense fallback={<div>loading...</div>}><Comp/></Suspense>}
+              />
+          })
+        }
+        <Route path='/about' element={
+          <Suspense fallback={<div>loading...</div>}>
+            <About/>
+          </Suspense>
+        }></Route>
+      </Routes>
 
       <footer>
         <h1>Footer</h1>
       </footer>
-    </BrowserRouter>
+    </Router>
   )
 }
