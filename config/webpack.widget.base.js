@@ -11,7 +11,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash:8].js',
     path: path.resolve(baseDir, `dist/widget`),
-    library: 'module'
+    library: 'module' // 注意要和 LazyLoadWidgetPlugin 中 postfix 中使用的一到
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -35,7 +35,7 @@ module.exports = {
   },
   plugins: [
     new LazyLoadWidgetPlugin({
-      publicPath: '/widget'
+      publicPath: '/widget' // 注意这个是构建后，服务器保存的地址
     })
   ]
 }
