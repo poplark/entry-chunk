@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const LazyLoadWidgetPlugin = require('../config/LazyLoadWidgetPlugin');
+const EntryChunkPlugin = require('../extension/EntryChunkPlugin');
 
 const baseDir = process.cwd();
 
@@ -33,7 +33,7 @@ module.exports = {
         use: [
           'babel-loader',
           {
-            loader: LazyLoadWidgetPlugin.loader,
+            loader: EntryChunkPlugin.loader,
             options: {
               replacePublicPath: function(id) {
                 if (id.indexOf('/widget') === 0) {

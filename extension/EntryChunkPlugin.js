@@ -1,6 +1,10 @@
 const path = require('path');
 const { ReplaceSource, SourceMapSource } = require('webpack').sources;
 
+function isLegacyTapable(tapable) {
+  return tapable.plugin && tapable.plugin.name !== "deprecated";
+};
+
 function isSourceMap(input) {
   // All required options for `new SourceMapConsumer(...options)`
   // https://github.com/mozilla/source-map#new-sourcemapconsumerrawsourcemap
@@ -37,7 +41,7 @@ function getPostfix(library) {
   ].join('\n');
 }
 
-function LazyLoadWidgetPlugin(options = {}) {
+function EntryChunkPlugin(options = {}) {
   const { publicPath = '' } = options;
 
   this.options = {
@@ -45,10 +49,10 @@ function LazyLoadWidgetPlugin(options = {}) {
   };
 }
 
-const PLUGIN_NAME = 'LazyLoadWidgetPlugin';
+const PLUGIN_NAME = 'EntryChunkPlugin';
 const SUPPORTED_LIBRARY_TYPE = ['var', 'umd', 'umd2'];
 
-LazyLoadWidgetPlugin.prototype.apply = function (compiler) {
+EntryChunkPlugin.prototype.apply = function (compiler) {
   function chunkFn(compilation, callback) {
     const { type, name: library } = compilation.options.output.library;
     if (!SUPPORTED_LIBRARY_TYPE.includes(type)) {
@@ -104,6 +108,6 @@ LazyLoadWidgetPlugin.prototype.apply = function (compiler) {
   }
 };
 
-LazyLoadWidgetPlugin.loader = require.resolve('./LazyLoadWidgetLoader')
+EntryChunkPlugin.loader = require.resolve('./EntryChunkLoader')
 
-module.exports = LazyLoadWidgetPlugin;
+module.exports = EntryChunkPlugin;

@@ -1,5 +1,5 @@
 const path = require('path');
-const LazyLoadWidgetPlugin = require('./LazyLoadWidgetPlugin');
+const EntryChunkPlugin = require('../extension/EntryChunkPlugin');
 
 const baseDir = process.cwd();
 
@@ -37,7 +37,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new LazyLoadWidgetPlugin({
+    new EntryChunkPlugin({
       publicPath: '/widget' // 注意这个是构建后，服务器保存的地址
     })
   ]
