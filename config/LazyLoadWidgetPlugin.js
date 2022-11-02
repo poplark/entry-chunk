@@ -1,5 +1,5 @@
 const path = require('path');
-const { ReplaceSource, SourceMapSource } = require('webpack-sources');
+const { ReplaceSource, SourceMapSource } = require('webpack').sources;
 
 function isSourceMap(input) {
   // All required options for `new SourceMapConsumer(...options)`
@@ -14,26 +14,27 @@ function isSourceMap(input) {
 }
 
 function getPrefix(chunkId) {
-  return `
-    (self["webpackJsonp"] = self["webpackJsonp"] || []).push([
-      ["${chunkId}"],
-      {
-        "${chunkId}": (
-          (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-            __webpack_require__.r(__webpack_exports__);
-            __webpack_require__.d(__webpack_exports__, {
-              "default": () => {
-  `;
+  return [
+    `(self["webpackJsonp"] = self["webpackJsonp"] || []).push([`,
+    `  ["${chunkId}"],`,
+    `  {`,
+    `    "${chunkId}": (`,
+    `      (__unused_webpack_module, __webpack_exports__, __webpack_require__) => {`,
+    `        __webpack_require__.r(__webpack_exports__);`,
+    ``,
+  ].join('\n');
 }
-function getPostfix() {
-  return `
-                return module.default;
-              }
-            });
-          }
-        )
-      }
-    ]);`;
+function getPostfix(library) {
+  return [
+    ``,
+    `        __webpack_require__.d(__webpack_exports__, {`,
+    `          "default": () => ${library}.default`,
+    `        });`,
+    `      }`,
+    `    )`,
+    `  }`,
+    `]);`
+  ].join('\n');
 }
 
 function LazyLoadWidgetPlugin(options = {}) {
@@ -44,43 +45,51 @@ function LazyLoadWidgetPlugin(options = {}) {
   };
 }
 
+const PLUGIN_NAME = 'LazyLoadWidgetPlugin';
+const SUPPORTED_LIBRARY_TYPE = ['var', 'umd', 'umd2'];
+
 LazyLoadWidgetPlugin.prototype.apply = function (compiler) {
   function chunkFn(compilation, callback) {
-    for (let file in compilation.assets) {
-      let chunkId = path.join(this.options.publicPath, file);
+    const { type, name: library } = compilation.options.output.library;
+    if (!SUPPORTED_LIBRARY_TYPE.includes(type)) {
+      const err = new Error(`The output.library.type of configuration of webpack must be one of ${SUPPORTED_LIBRARY_TYPE} when using ${PLUGIN_NAME}`);
+      compilation.errors.push(err);
+      return callback(err);
+    }
+    const { filename } = compilation.options.output;
+    console.log('eeee', filename);
+    let chunkId = path.join(this.options.publicPath, filename);
+    const asset = compilation.assets[filename];
+    try {
+      const { source, map } = asset.sourceAndMap();
 
-      const asset = compilation.assets[file];
-      try {
-        const { source, map } = asset.sourceAndMap();
+      let replaceSource = new ReplaceSource(asset);
+      const length = source.length;
+      replaceSource.insert(length, getPostfix(library));
+      replaceSource.insert(0, getPrefix(chunkId));
 
-        let replaceSource = new ReplaceSource(asset);
-        const length = source.length;
-        replaceSource.insert(length - 1, getPostfix());
-        replaceSource.insert(0, getPrefix(chunkId));
+      compilation.assets[filename] = replaceSource;
+      // let resultText = replaceSource.source();
+      // let resultMap = replaceSource.map({
+      //     columns: false
+      // });
+      // let outputSource = new SourceMapSource(
+      //     resultText,
+      //     file,
+      //     resultMap,
+      //     source,
+      //     map
+      // );
 
-        compilation.assets[file] = replaceSource;
-        // let resultText = replaceSource.source();
-        // let resultMap = replaceSource.map({
-        //     columns: false
-        // });
-        // let outputSource = new SourceMapSource(
-        //     resultText,
-        //     file,
-        //     resultMap,
-        //     source,
-        //     map
-        // );
-
-        // compilation.assets[file] = outputSource;
-      } catch (error) {
-        compilation.errors.push(new Error(`${file} from chunk loader plugin`));
-      }
+      // compilation.assets[file] = outputSource;
+    } catch (error) {
+      compilation.errors.push(new Error(`${filename} from chunk loader plugin`));
     }
     callback && callback();
   }
 
   if (compiler.hooks) {
-    const plugin = { name: 'LazyLoadWidgetPlugin' };
+    const plugin = { name: PLUGIN_NAME };
     compiler.hooks.compilation.tap(plugin, compilation => {
       compilation.hooks.additionalAssets.tapAsync(plugin, callback => {
         chunkFn.call(this, compilation, callback);
@@ -94,5 +103,7 @@ LazyLoadWidgetPlugin.prototype.apply = function (compiler) {
     });
   }
 };
+
+LazyLoadWidgetPlugin.loader = require.resolve('./LazyLoadWidgetLoader')
 
 module.exports = LazyLoadWidgetPlugin;

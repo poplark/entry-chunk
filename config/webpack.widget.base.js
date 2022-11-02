@@ -11,7 +11,10 @@ module.exports = {
   output: {
     filename: '[name].[contenthash:8].js',
     path: path.resolve(baseDir, `dist/widget`),
-    library: 'module' // 注意要和 LazyLoadWidgetPlugin 中 postfix 中使用的一到
+    library: {
+      name: 'someLibName',
+      type: 'var', // var, umd, umd2
+    },
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -27,7 +30,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js(x)?/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: ['babel-loader']
       }

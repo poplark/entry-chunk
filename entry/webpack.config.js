@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const LazyLoadWidgetPlugin = require('../config/LazyLoadWidgetPlugin');
 
 const baseDir = process.cwd();
 
@@ -26,9 +27,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js(x)?/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
+        // use: ['babel-loader'],
+        use: [
+          'babel-loader',
+          {
+            loader: LazyLoadWidgetPlugin.loader,
+            options: {
+              replacePublicPath: function(id) {
+                if (id.indexOf('/widget') === 0) {
+                  return '';
+                }
+              },
+              replaceGetFilename: function(chunkId) {
+                if (chunkId.indexOf('/widget') === 0) {
+                  return chunkId;
+                }
+              }
+            }
+          }
+        ]
       }
     ]
   },
@@ -37,7 +56,7 @@ module.exports = {
       template: path.resolve(__dirname, 'public/index.html'),
       // filename: 'xx.html',
       // chunks: ['vendor', 'common', 'main']
-    })
+    }),
   ],
   optimization: {
     splitChunks: {
