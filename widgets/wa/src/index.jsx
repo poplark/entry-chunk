@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Outlet } from 'react-router-dom';
 import { WidgetContainer } from 'x-common';
 import { WA1, WA2, WA3 } from './sub-components';
+
+const CommonDetail = lazy(() => import('./detail'));
 
 // 配置 widget 显示名称
 const title = 'WA';
@@ -24,6 +26,9 @@ export default function Widget(props) {
       <h2>
         WAWA.....
       </h2>
+      <Suspense fallback={<div>loading...</div>}>
+        <CommonDetail></CommonDetail>
+      </Suspense>
     <Outlet>
       <WidgetContainer {...props} title={title} routes={routes}></WidgetContainer>
     </Outlet>
