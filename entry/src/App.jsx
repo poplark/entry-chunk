@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import entryChunkImport from '../../extension/entry-chunk-import';
 
 function Dashboard() {
   return <div>
@@ -47,13 +48,10 @@ export function App() {
         {/* todo - dynamic routes */}
         {
           widgets.map((widget) => {
-            // const Comp = lazy(() => import(`${widget.file}`));
-            // const Comp = (0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
-            //   return __webpack_require__.e(/*! import() */ widget.file).then(__webpack_require__.bind(__webpack_require__, /*! ./About */ widget.file));
+            const Comp = lazy(() => entryChunkImport(widget.file))
+            // const Comp = lazy(function () {
+            //   return __webpack_require__.e(widget.file).then(__webpack_require__.bind(__webpack_require__, widget.file));
             // });
-            const Comp = lazy(function () {
-              return __webpack_require__.e(widget.file).then(__webpack_require__.bind(__webpack_require__, widget.file));
-            });
             return <Route
               key={widget.path}
               path={widget.path}

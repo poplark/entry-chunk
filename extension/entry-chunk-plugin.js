@@ -108,6 +108,6 @@ EntryChunkPlugin.prototype.apply = function (compiler) {
   }
 };
 
-EntryChunkPlugin.loader = require.resolve('./EntryChunkLoader')
+EntryChunkPlugin.loader = require.resolve('./entry-chunk-loader')
 
 module.exports = EntryChunkPlugin;

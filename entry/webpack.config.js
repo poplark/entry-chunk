@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const EntryChunkPlugin = require('../extension/EntryChunkPlugin');
+const EntryChunkPlugin = require('../extension/entry-chunk-plugin');
 
 const baseDir = process.cwd();
 

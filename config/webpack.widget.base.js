@@ -1,5 +1,5 @@
 const path = require('path');
-const EntryChunkPlugin = require('../extension/EntryChunkPlugin');
+const EntryChunkPlugin = require('../extension/entry-chunk-plugin');
 
 const baseDir = process.cwd();
 
