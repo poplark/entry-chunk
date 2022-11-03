@@ -36,12 +36,12 @@ module.exports = {
             loader: EntryChunkPlugin.loader,
             options: {
               replacePublicPath: function(id) {
-                if (id.indexOf('/widget') === 0) {
+                if (typeof id === 'string' && id.indexOf('/widget') === 0) {
                   return '';
                 }
               },
               replaceGetFilename: function(chunkId) {
-                if (chunkId.indexOf('/widget') === 0) {
+                if (typeof chunkId === 'string' && chunkId.indexOf('/widget') === 0) {
                   return chunkId;
                 }
               }
