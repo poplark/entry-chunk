@@ -7,8 +7,6 @@ const baseDir = process.cwd();
 console.log('base dir', baseDir);
 
 module.exports = {
-  mode: 'development',
-  devtool: 'cheap-source-map',
   output: {
     filename: '[name].[contenthash:8].js',
     path: path.resolve(baseDir, `dist/widget`),

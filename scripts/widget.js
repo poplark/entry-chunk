@@ -6,7 +6,18 @@ const widget = process.argv[2];
 
 console.log(`widget ${widget} 将被编译`);
 
-const config = replaceEntry(merge(baseConfig, require(`../widgets/${widget}/webpack.config`)), widget);
+const config = replaceEntry(
+  merge(
+    baseConfig,
+    require(`../widgets/${widget}/webpack.prod`),
+    {
+      output: {
+        chunkLoadingGlobal: `webpack${widget}Jsonp`, // 需要为每个 widget 指定不同的 webpackJsonp 名称，不然可能会导致 widget chunk 加载时的冲突
+      }
+    }
+  ),
+  widget,
+);
 
 console.log(`widget ${widget} 配置信息`, config);
 
