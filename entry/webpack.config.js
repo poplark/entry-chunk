@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const EntryChunkPlugin = require('../extension/entry-chunk-plugin');
 
@@ -14,7 +15,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(baseDir, 'dist/entry'),
-    chunkLoadingGlobal: 'webpackJsonp'
+    chunkLoadingGlobal: 'webpackJsonp', // todo 目前 EntryChunkPlugin 为硬编码的，后面支持可配置
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -57,6 +58,14 @@ module.exports = {
       // filename: 'xx.html',
       // chunks: ['vendor', 'common', 'main']
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'public/*.js'),
+          to: path.resolve(baseDir, 'dist'),
+        },
+      ],
+    })
   ],
   optimization: {
     splitChunks: {

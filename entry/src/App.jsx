@@ -16,7 +16,7 @@ function loadWidgets() {
     setTimeout(() => {
       resolve([
         {name: 'WA', path: 'wa', file: '/widget/wa.js'},
-        {name: 'yy', path: 'yy', file: '/widgets/yyy'},
+        {name: 'WB', path: 'wb', file: '/widget/wb.js'},
       ])
     }, 1000);
   });
