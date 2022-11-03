@@ -4,11 +4,10 @@
   "description": "",
   "main": "entry/src/index.js",
   "scripts": {
-    "entry": "node scripts/entry.js",
-    "entry:build": "node scripts/entry.js",
-    "common": "node scripts/common.js",
     "widget": "node scripts/widget.js",
-    "widget:build": "node scripts/widget.js"
+    "entry": "node scripts/entry.js",
+    "common": "node scripts/common.js",
+    "start": "node scripts/dev.js"
   },
   "author": "",
   "license": "ISC",

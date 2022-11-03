@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const baseConfig = require('../config/webpack.widget.base');
+const { replaceEntry } = require('./utils');
 
 const widget = process.argv[2];
 
@@ -37,42 +38,9 @@ compiler.run((err, stats) => {
   console.info(`widget ${widget} 构建完成`);
   // console.info(stats.chunks);
 
+  // todo - 将生成的 assets 数据入库保存
+
   compiler.close((closeErr) => {
     // ...
   });
 })
-
-function replaceEntry(config, widgetName) {
-  const entryType = Object.prototype.toString.call(config.entry);
-  switch (entryType) {
-    case '[object String]':
-      config.entry = {
-        [widgetName]: config.entry
-      };
-      break;
-    case '[object Object]':
-      const entries = Object.entries(config.entry);
-      if (entries.length > 0) {
-        let [_, mainEntry] = entries[0]; // todo - 只获取第一个么？？？
-        config.entry = {
-          [widgetName]: mainEntry
-        };
-        // todo - 不应该支持多 entry ？？
-        const len = entries.length;
-        for (let i=1; i<len; i++) {
-          [_, mainEntry] = entries[i];
-          config.entry[`${widgetName}-${i}`] = mainEntry;
-        }
-      } else {
-        console.warn('No correct entry in configuration of webpack!');
-      }
-      break;
-    case '[object Function]':
-    case '[object Undefined]':
-    case '[object Null]':
-    default:
-      console.warn(`The entry of webpack config - ${JSON.stringify(config.entry)} may be wrong!`);
-      break;
-  }
-  return config;
-}
