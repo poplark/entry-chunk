@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import entryChunkImport from '../../extension/entry-chunk-import';
+import './index.css';
 
 function Dashboard() {
   return <div>
@@ -37,7 +38,7 @@ export function App() {
           <Link to="/">Home</Link>
           {/* todo - dynamic link */}
           {
-            widgets.map((widget) => <Link key={widget.path} to={widget.path}><p>{widget.name}</p></Link>)
+            widgets.map((widget) => <Link key={widget.path} to={widget.path}>{widget.name}</Link>)
           }
           <Link to="/about">About</Link>
         </nav>

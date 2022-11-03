@@ -1,5 +1,7 @@
 const path = require('path');
 const externals = require('./externals');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const EntryChunkPlugin = require('../extension/entry-chunk-plugin');
 
 const baseDir = process.cwd();
@@ -20,6 +22,10 @@ module.exports = {
   externals: externals,
   module: {
     rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -45,6 +51,21 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: path.resolve(baseDir, 'entry/public/index.html'),
+      // filename: 'xx.html',
+      // chunks: ['vendor', 'common', 'main']
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.resolve(baseDir, 'entry/public/*.js'),
+          to: path.resolve(baseDir, 'dist'),
+        },
+      ],
+    })
+  ],
   optimization: {
     splitChunks: {
       chunks: 'all',

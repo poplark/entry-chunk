@@ -5,8 +5,10 @@
   "main": "entry/src/index.js",
   "scripts": {
     "entry": "node scripts/entry.js",
+    "entry:build": "node scripts/entry.js",
     "common": "node scripts/common.js",
-    "widget": "node scripts/widget.js"
+    "widget": "node scripts/widget.js",
+    "widget:build": "node scripts/widget.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,8 +23,11 @@
     "babel": "^6.23.0",
     "babel-loader": "^9.0.0",
     "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
+    "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0"
   }
 }
