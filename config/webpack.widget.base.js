@@ -1,4 +1,5 @@
 const path = require('path');
+const externals = require('./externals');
 const EntryChunkPlugin = require('../extension/entry-chunk-plugin');
 
 const baseDir = process.cwd();
@@ -22,11 +23,7 @@ module.exports = {
       'x-common': path.resolve(baseDir, 'common/src')
     }
   },
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'react-router-dom': 'ReactRouterDOM',
-  },
+  externals: externals,
   module: {
     rules: [
       {

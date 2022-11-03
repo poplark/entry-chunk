@@ -1,6 +1,5 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const externals = require('./externals');
 const EntryChunkPlugin = require('../extension/entry-chunk-plugin');
 
 const baseDir = process.cwd();
@@ -8,8 +7,6 @@ const baseDir = process.cwd();
 console.log('base dir', baseDir);
 
 module.exports = {
-  mode: 'development',
-  devtool: 'cheap-source-map',
   entry: {
     main: path.resolve(baseDir, 'entry/src/index.js')
   },
@@ -20,11 +17,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx']
   },
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'react-router-dom': 'ReactRouterDOM',
-  },
+  externals: externals,
   module: {
     rules: [
       {
@@ -52,21 +45,6 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'public/index.html'),
-      // filename: 'xx.html',
-      // chunks: ['vendor', 'common', 'main']
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, 'public/*.js'),
-          to: path.resolve(baseDir, 'dist'),
-        },
-      ],
-    })
-  ],
   optimization: {
     splitChunks: {
       chunks: 'all',

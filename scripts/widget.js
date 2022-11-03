@@ -1,12 +1,12 @@
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const baseConfig = require('../config/webpack.widget.base.js');
+const baseConfig = require('../config/webpack.widget.base');
 
 const widget = process.argv[2];
 
 console.log(`widget ${widget} 将被编译`);
 
-const config = replaceEntry(merge(baseConfig, require(`../widgets/${widget}/webpack.config.js`)), widget);
+const config = replaceEntry(merge(baseConfig, require(`../widgets/${widget}/webpack.config`)), widget);
 
 console.log(`widget ${widget} 配置信息`, config);
 
