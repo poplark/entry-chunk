@@ -5,32 +5,31 @@ const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const { replaceEntry } = require('./utils');
-const baseConfig = require('../config/webpack.widget.base');
-const baseDir = process.cwd();
 
-const widget = process.argv[2];
+const [_n, _s, widget] = process.argv;
+
 console.log(`widget ${widget} 将被编译`);
+startWidget(widget);
 
-const config = replaceEntry(
-  merge(
-    baseConfig,
-    require(`../widgets/${widget}/webpack.prod`),
-    {
-      output: {
-        path: path.resolve(baseDir, `dist/widget/${widget}`),
-        publicPath: `/widget/${widget}/`, // 可配置 CDN 地址
-        chunkLoadingGlobal: `webpack${widget}Jsonp`, // 需要为每个 widget 指定不同的 webpackJsonp 名称，不然可能会导致 widget chunk 加载时的冲突
+function startWidget(widget) {
+  const baseConfig = require('../config/webpack.widget.base');
+  const config = replaceEntry(
+    merge(
+      baseConfig,
+      require(`../widgets/${widget}/webpack.prod`),
+      {
+        output: {
+          path: path.resolve(__dirname, `../dist/widget/${widget}`),
+          publicPath: `/widget/${widget}/`, // 可配置 CDN 地址
+          chunkLoadingGlobal: `webpack${widget}Jsonp`, // 需要为每个 widget 指定不同的 webpackJsonp 名称，不然可能会导致 widget chunk 加载时的冲突
+        }
       }
-    }
-  ),
-  widget,
-);
+    ),
+    widget,
+  );
 
-console.log(`widget ${widget} 配置信息`, config);
+  console.log(`widget ${widget} 配置信息`, config);
 
-startWidget(config);
-
-function startWidget(config) {
   const compiler = webpack(config);
   compiler.run((err, stats) => {
     if (err) {

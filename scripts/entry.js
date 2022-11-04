@@ -3,15 +3,14 @@
  */
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const baseConfig = require('../config/webpack.entry.base');
 
-const config = merge(baseConfig, require('../entry/webpack.prod'));
+startEntry();
 
-console.log(`entry 配置信息`, config);
+function startEntry() {
+  const baseConfig = require('../config/webpack.entry.base');
+  const config = merge(baseConfig, require('../entry/webpack.prod'));
+  console.log(`entry 配置信息`, config);
 
-startEntry(config);
-
-function startEntry(config) {
   const compiler = webpack(config);
   compiler.run((err, stats) => {
     if (err) {
