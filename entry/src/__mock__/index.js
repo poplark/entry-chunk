@@ -1,6 +1,6 @@
-import dev1 from './url';
-import dev2 from './absolute';
+import cdn from './url';
+import absolute from './absolute';
 
-const routes = process.env.NODE_ENV === 'production' ? dev2 : dev1;
+const routes = process.env.NODE_ENV === 'production' ? absolute : DEV_MODE === 'm-server' ? cdn : absolute;
 
 export default routes;

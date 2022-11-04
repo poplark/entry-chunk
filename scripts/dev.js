@@ -16,7 +16,13 @@ startEntry(getWidgetConfigs(), PORT);
 // 使用 multiple compiler 的方式调试 widget
 function startEntry(widgetConfigs, port) {
   const baseConfig = require('../config/webpack.entry.base');
-  const config = merge(baseConfig, require('../entry/webpack.dev'));
+  const config = merge(baseConfig, require('../entry/webpack.dev'), {
+    plugins: [
+      new webpack.DefinePlugin({
+        DEV_MODE: JSON.stringify('m-compiler')
+      })
+    ]
+  });
   // todo - 使用 multiple compiler ，widget 更新时，存在 HMR 无法支持的问题
   const multipleCompiler = webpack([config].concat(widgetConfigs));
 
