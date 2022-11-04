@@ -18,7 +18,7 @@ function startEntry(widgetConfigs, port) {
   const baseConfig = require('../config/webpack.entry.base');
   const config = merge(baseConfig, require('../entry/webpack.dev'));
   // todo - 使用 multiple compiler ，widget 更新时，存在 HMR 无法支持的问题
-  const multipleCompiler = webpack([entryConfig].concat(widgetConfigs));
+  const multipleCompiler = webpack([config].concat(widgetConfigs));
 
   const devServerOpts = merge(config.devServer, {port});
 
