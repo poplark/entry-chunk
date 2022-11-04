@@ -7,7 +7,8 @@
     "widget": "node scripts/widget.js",
     "entry": "node scripts/entry.js",
     "common": "node scripts/common.js",
-    "start": "node scripts/dev.js"
+    "start": "node scripts/dev.js",
+    "start2": "node scripts/dev2.js"
   },
   "author": "",
   "license": "ISC",

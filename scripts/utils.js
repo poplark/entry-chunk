@@ -1,4 +1,5 @@
 /**
+ * todo - remove
  * 自动判断 widget 的 entry 合规性，并自动修正
  * @param {*} config 
  * @param {*} widgetName 
