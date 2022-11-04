@@ -70,7 +70,8 @@ function startEntry(port) {
       new webpack.DefinePlugin({
         DEV_MODE: JSON.stringify('m-server')
       })
-    ]
+    ],
+    stats: 'errors-only',
   });
 
   const compiler = webpack(config);

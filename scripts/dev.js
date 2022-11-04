@@ -21,7 +21,8 @@ function startEntry(widgetConfigs, port) {
       new webpack.DefinePlugin({
         DEV_MODE: JSON.stringify('m-compiler')
       })
-    ]
+    ],
+    stats: 'errors-only',
   });
   // todo - 使用 multiple compiler ，widget 更新时，存在 HMR 无法支持的问题
   const multipleCompiler = webpack([config].concat(widgetConfigs));
@@ -61,8 +62,9 @@ function getWidgetConfigs() {
               publicPath: `/widget/${widget.name}/`,
               chunkLoadingGlobal: `webpack${widget.name}Jsonp`,
               hotUpdateGlobal: `webpackHotUpdate${widget.name}`, // 解决开启HMR，多个 widget 使用同一个 webpackHotUpdate 时异常的问题
-            }
-          }
+            },
+            stats: 'errors-only',
+          },
         ),
         widget.name
       )
