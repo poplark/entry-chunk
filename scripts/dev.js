@@ -1,13 +1,40 @@
+/**
+ * entry + widget 的开发脚本
+ * 使用 multiple compiler 方式，只开启一个 dev server 的方式
+ */
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const WebpackDevServer = require('webpack-dev-server');
+const { replaceEntry } = require('./utils');
 const baseConfig = require('../config/webpack.entry.base');
 const widgetBaseConfig = require('../config/webpack.widget.base');
-const { replaceEntry } = require('./utils');
 
-function getWidgetConfigs() {
+const PORT = 9000;
+const config = merge(baseConfig, require('../entry/webpack.dev'));
+
+startEntry(config, getWidgetConfigs(widgetBaseConfig));
+
+// 使用 multiple compiler 的方式调试 widget
+function startEntry(entryConfig, widgetConfigs) {
+  // todo - 使用 multiple compiler ，widget 更新时，存在 HMR 无法支持的问题
+  const multipleCompiler = webpack([entryConfig].concat(widgetConfigs));
+
+  const devServerOpts = merge(config.devServer, {port: PORT});
+
+  const server = new WebpackDevServer(devServerOpts, multipleCompiler);
+
+  server.start()
+    .then(() => {
+      console.log('dev server listening at ', PORT);
+    })
+    .catch((err) => {
+      console.log('dev server start failed ', err);
+    });
+}
+
+function getWidgetConfigs(baseConfig) {
   let configs = [];
   let widgets;
   const devJsonPath = path.resolve(__dirname, '../widgets.json');
@@ -21,7 +48,7 @@ function getWidgetConfigs() {
     configs.push(
       replaceEntry(
         merge(
-          widgetBaseConfig,
+          baseConfig,
           require(`../widgets/${widget.name}/webpack.dev`),
           {
             output: {
@@ -34,28 +61,5 @@ function getWidgetConfigs() {
       )
     );
   }
-  console.log('widget configs', configs);
   return configs;
 }
-
-const widgetConfigs = getWidgetConfigs();
-
-const PORT = 9000;
-const config = merge(baseConfig, require('../entry/webpack.dev'));
-
-// todo - 使用 multiple compiler ，widget 更新时，存在 HMR 无法支持的问题
-const multipleCompiler = webpack([config].concat(widgetConfigs));
-
-// const compiler = webpack(config);
-
-const devServerOpts = merge(config.devServer, {port: PORT});
-
-const server = new WebpackDevServer(devServerOpts, multipleCompiler);
-
-server.start()
-  .then(() => {
-    console.log('dev server listening at ', PORT);
-  })
-  .catch((err) => {
-    console.log('dev server start failed ', err);
-  });
