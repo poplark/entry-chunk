@@ -1,3 +1,6 @@
+/**
+ * 单个 widget 的构建脚本
+ */
 const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');

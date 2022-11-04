@@ -1,3 +1,6 @@
+/**
+ * entry 的构建脚本
+ */
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const baseConfig = require('../config/webpack.entry.base');
