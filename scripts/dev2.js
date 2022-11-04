@@ -24,7 +24,16 @@ function startWidgetsAndEntry(mainPort) {
     // config.devServer.proxy[`/widget/${name}`] = `http://localhost:${port}`;
   }
 
-  const server = startServer(mainPort);
+  let server;
+  try {
+    server = startEntry(mainPort);
+  } catch (err) {
+    console.log('start entry failed ', err);
+    for (const child of children) {
+      const [_, ac] = child;
+      ac.abort();
+    }
+  }
 
   ['SIGINT', 'SIGTERM'].forEach(function(sig) {
     process.on(sig, function() {
@@ -54,9 +63,15 @@ function generateStartWidgetArgs(port) {
   return args;
 }
 
-function startServer(port) {
+function startEntry(port) {
   const baseConfig = require('../config/webpack.entry.base');
-  const config = merge(baseConfig, require('../entry/webpack.dev'));
+  const config = merge(baseConfig, require('../entry/webpack.dev'), {
+    plugins: [
+      new webpack.DefinePlugin({
+        DEV_MODE: JSON.stringify('m-server')
+      })
+    ]
+  });
 
   const compiler = webpack(config);
 
