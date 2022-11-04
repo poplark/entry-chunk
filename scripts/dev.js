@@ -52,6 +52,7 @@ function getWidgetConfigs(baseConfig) {
           require(`../widgets/${widget.name}/webpack.dev`),
           {
             output: {
+              publicPath: `/widget/${widget.name}/`,
               chunkLoadingGlobal: `webpack${widget.name}Jsonp`,
               hotUpdateGlobal: `webpackHotUpdate${widget.name}`, // 解决开启HMR，多个 widget 使用同一个 webpackHotUpdate 时异常的问题
             }
