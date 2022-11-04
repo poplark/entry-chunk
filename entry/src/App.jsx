@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import entryChunkImport from '../../extension/entry-chunk-import';
+import entryChunkImport from '../../plugins/entry-chunk-plugin/import';
 import './index.css';
 import routes from './__mock__';
 

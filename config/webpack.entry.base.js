@@ -2,7 +2,7 @@ const path = require('path');
 const externals = require('./externals');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const EntryChunkPlugin = require('../extension/entry-chunk-plugin');
+const EntryChunkPlugin = require('../plugins/entry-chunk-plugin');
 
 const baseDir = process.cwd();
 

@@ -129,6 +129,6 @@ class EntryChunkPlugin {
   }
 }
 
-EntryChunkPlugin.loader = require.resolve('./entry-chunk-loader');
+EntryChunkPlugin.loader = require.resolve('./loader');
 
 module.exports = EntryChunkPlugin;
