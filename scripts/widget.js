@@ -5,6 +5,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const { replaceEntry } = require('./utils');
+const EmitEntryInfoPlugin = require('../plugins/emit-entry-info-plugin');
 
 const [_n, _s, widget] = process.argv;
 
@@ -22,7 +23,15 @@ function startWidget(widget) {
           path: path.resolve(__dirname, `../dist/widget/${widget}`),
           publicPath: `/widget/${widget}/`, // 可配置 CDN 地址
           chunkLoadingGlobal: `webpack${widget}Jsonp`, // 需要为每个 widget 指定不同的 webpackJsonp 名称，不然可能会导致 widget chunk 加载时的冲突
-        }
+        },
+        plugins: [
+          new EmitEntryInfoPlugin({
+            callback: (files) => {
+              console.log(`${widget} 的入口文件有`, files);
+              // todo - 生成路由信息并入库
+            }
+          })
+        ],
       }
     ),
     widget,

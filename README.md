@@ -55,21 +55,17 @@ widgets.json 示例
 yarn start
 ```
 
-优点：
-1. 共用一个 dev-server，不管指定指定多少个 widget 都只开启一个 node 子进程
-2. 控制台日志输出比较友好
-缺点：可能跟生产环境中entry 和 widget 部署的场景不同
+优点：共用一个 dev-server，不管指定指定多少个 widget 都只开启一个 node 子进程
+缺点：可能跟生产环境中 entry 和 widget 部署的场景不同
 
 2. multiple server 模式 - entry 和若干 widget 各自开启 dev server
 
 ```sh
-yarn start
+yarn start2
 ```
 
 优点：更贴合生产环境中 entry 与 widget 可能部署到不同地址的场景
-缺点：
-1. entry 占一个 node 子进程，每多指定一个 widget 就多开启一个 node 子进程
-2. 控制台中各 widget 日志输出比较混乱
+缺点：entry 占一个 node 子进程，每多指定一个 widget 就多开启一个 node 子进程
 
 
 todo
