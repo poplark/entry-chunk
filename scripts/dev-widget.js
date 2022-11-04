@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const WebpackDevServer = require('webpack-dev-server');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const { replaceEntry } = require('./utils');
 
 const [_n, _s, widget, port] = process.argv;
@@ -22,7 +23,8 @@ function startWidget(widget, port) {
           chunkLoadingGlobal: `webpack${widget}Jsonp`,
           hotUpdateGlobal: `webpackHotUpdate${widget}`, // 解决开启HMR，多个 widget 使用同一个 webpackHotUpdate 时异常的问题
         },
-        stats: 'errors-only',
+        plugins: [new FriendlyErrorsWebpackPlugin()],
+        // stats: 'errors-only',
       }
     ),
     widget

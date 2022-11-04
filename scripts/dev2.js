@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const WebpackDevServer = require('webpack-dev-server');
 
 const PORT = 9000;
@@ -69,7 +70,8 @@ function startEntry(port) {
     plugins: [
       new webpack.DefinePlugin({
         DEV_MODE: JSON.stringify('m-server')
-      })
+      }),
+      new FriendlyErrorsWebpackPlugin(),
     ],
     stats: 'errors-only',
   });
