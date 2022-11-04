@@ -1,4 +1,3 @@
-const path = require('path');
 const { ReplaceSource, SourceMapSource } = require('webpack').sources;
 
 function isLegacyTapable(tapable) {
@@ -21,14 +20,6 @@ const PLUGIN_NAME = 'EntryChunkPlugin';
 const SUPPORTED_LIBRARY_TYPE = ['var', 'umd', 'umd2'];
 
 class EntryChunkPlugin {
-  constructor(options = {}) {
-    const { publicPath = '' } = options;
-
-    this.options = {
-      publicPath,
-    };
-  }
-
   apply(compiler) {
     if (compiler.hooks) {
       const plugin = { name: PLUGIN_NAME };
@@ -71,7 +62,9 @@ class EntryChunkPlugin {
    */
   addAffixes(compilation, filename) {
     const { name: library } = compilation.outputOptions.library;
-    let chunkId = path.join(this.options.publicPath, filename);
+    const { publicPath = ''} = compilation.outputOptions;
+    // todo - 直接相加，无法处理中间 / 的问题，如 /a + main.js
+    let chunkId = `${publicPath}` + `${filename}`;
     const asset = compilation.assets[filename];
     try {
       const { source, map } = asset.sourceAndMap();

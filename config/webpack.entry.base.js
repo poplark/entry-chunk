@@ -34,18 +34,6 @@ module.exports = {
           'babel-loader',
           {
             loader: EntryChunkPlugin.loader,
-            options: {
-              replacePublicPath: function(id) {
-                if (typeof id === 'string' && id.indexOf('/widget') === 0) {
-                  return '';
-                }
-              },
-              replaceGetFilename: function(chunkId) {
-                if (typeof chunkId === 'string' && chunkId.indexOf('/widget') === 0) {
-                  return chunkId;
-                }
-              }
-            }
           }
         ]
       }
