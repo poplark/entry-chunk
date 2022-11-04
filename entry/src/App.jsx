@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import entryChunkImport from '../../extension/entry-chunk-import';
 import './index.css';
+import routes from './__mock__';
 
 function Dashboard() {
   return <div>
@@ -15,10 +16,7 @@ const About = lazy(() => import('./About'));
 function loadWidgets() {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve([
-        {name: 'WA', path: 'wa', file: '/widget/wa.js'},
-        {name: 'WB', path: 'wb', file: '/widget/wb.js'},
-      ])
+      resolve(routes);
     }, 1000);
   });
 }

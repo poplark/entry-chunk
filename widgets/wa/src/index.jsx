@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { WidgetContainer } from 'x-common';
 import { WA1, WA2, WA3 } from './sub-components';
 
-const CommonDetail = lazy(() => import('./detail'));
+const CommonDetail = lazy(() => import('./Detail'));
 
 // 配置 widget 显示名称
 const title = 'WA';
