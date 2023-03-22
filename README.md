@@ -24,11 +24,19 @@ command:
 yarn entry
 ```
 
+将构建后的产物置于 web 服务器中。
+
 2. 构建 widget 项目
 
 ```sh
-yarn widget xx
+yarn widget [widgetName] [basePublicPath]
 ```
+
+将构建后的产物置于 basePublicPath 指定的服务器中。不指定时，需要置于 entry 同服务器中。
+
+注：
+> 1. widgetName 为 widget 的名称
+> 2. basePublicPath 为 widget 将要部署到的服务器地址，如 `yarn widget sw http://x.y.z` 构建后，将需要从 http://x.y.z/widget/sw/sw.js 加载构建后的文件，不加 basePublicPath 时，将从 /widget/sw/sw.js 加载。一般使用 CDN 时需要指定 basePublicPath。还可能的命令有 `yarn widget sw https://x.y.z` 或 `yarn widget sw //x.y.z` 等。
 
 ### 本地开发
 
@@ -39,11 +47,13 @@ widgets.json 示例
 [
   {
     "name": "wa",
-    "path": "/wa"
+    "path": "/wa",
+    "file": "/widget/wa/wa.js"
   },
   {
     "name": "wb",
     "path": "/wb"
+    "file": "http://x.y.z/widget/wb/wb.js"
   }
 ]
 

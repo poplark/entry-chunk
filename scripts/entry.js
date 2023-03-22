@@ -25,7 +25,8 @@ function startEntry() {
       return;
     }
     console.info(`entry 构建完成`);
-    // console.info(stats.chunks);
+    // console.info(stats.compilation.chunks);
+    // console.info(stats.compilation.assets);
 
     compiler.close((closeErr) => {
       // ...
