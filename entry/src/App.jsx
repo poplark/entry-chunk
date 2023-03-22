@@ -2,7 +2,7 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import entryChunkImport from '../../plugins/entry-chunk-plugin/import';
 import './index.css';
-import routes from './__mock__';
+import { getRoutes } from './routes';
 
 function Dashboard() {
   return <div>
@@ -13,18 +13,10 @@ function Dashboard() {
 
 const About = lazy(() => import('./About'));
 
-function loadWidgets() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(routes);
-    }, 1000);
-  });
-}
-
 export function App() {
   const [widgets, setWidgets] = useState([]);
   useEffect(() => {
-    loadWidgets().then((widgets) => {
+    getRoutes().then((widgets) => {
       setWidgets(widgets);
     })
   }, []);

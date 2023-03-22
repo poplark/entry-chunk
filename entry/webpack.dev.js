@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 
 const baseDir = process.cwd();
 
@@ -17,5 +18,21 @@ module.exports = {
     compress: true,
     open: false,
     hot: true,
+    setupMiddlewares: (middlewares, devServer) => {
+      if (!devServer) {
+        throw new Error('webpack-dev-server is not defined');
+      }
+      devServer.app.get('/routes.json', (_, response) => {
+        const routesFile = path.resolve(baseDir, 'widgets.json');
+        if (routesFile) {
+          response.send(fs.readFileSync(routesFile));
+        } else {
+          const routesExample = JSON.stringify([{name: 'wa', path: 'wa', file: '/widget/wa/wa.js'}]);
+          response.send(routesExample);
+          fs.writeFileSync(JSON.stringify(routesExample));
+        }
+      });
+      return middlewares;
+    }
   },
 }
