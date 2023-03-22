@@ -1,17 +1,19 @@
 ## x-console
 
+本项目目的在于搭建控制台（包含多个独立产品或功能的站点），每个独立产品或功能可独立构建并部署，由后台 API（路由 API - 路由与 js 映射信息） 指定产品/功能的构建文件的加载地址，以此达到灵活控制用户对独立产品/功能点的加载地址。使用场景有：优化构建速度（构建粒度拆分到各产品/功能点）、各个产品/功能点的灰度等。
+
 ### 基本说明
-entry（容器项目）
-  - widget1（子页面项目）
+entry（入口项目）
+  - widget1（产品/功能点子页面项目）
   - widget2
   - ...
 
 功能说明：entry 容器项目与 widget 子页面项目可单独打包
-entry 进入后，调用 API，拿到 widget 信息（包含名称，路由，文件地址），通过 widget 信息懒加载 widget
+entry 进入后，调用 API，拿到 widget 信息（包含名称，路由，文件地址），通过 widget 信息懒加载 widget。
 
 特点：
 1. entry 与 widget 单独打包并发布，方便回滚
-2. widget 单独发布，方便其发布后共享到多个平台，不需要在各个平台各个打包并发布
+2. widget 单独发布，方便其发布后共享到多个平台，不需要在各个平台分别打包并发布
 3. 可由获取 widget 信息的 API 实现灰度
 
 command:
@@ -29,10 +31,10 @@ yarn entry
 2. 构建 widget 项目
 
 ```sh
-yarn widget [widgetName] [basePublicPath]
+yarn widget widgetName [basePublicPath]
 ```
 
-将构建后的产物置于 basePublicPath 指定的服务器中。不指定时，需要置于 entry 同服务器中。
+将构建后的产物置于 basePublicPath 指定的 web 服务器中。不指定时，需要置于 entry 同 web 服务器中。
 
 注：
 > 1. widgetName 为 widget 的名称
